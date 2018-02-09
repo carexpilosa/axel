@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script>
+  function test() {
+    charToNumber('A');
+    charToNumber('Z');
+
+    numberToChar(1);
+    numberToChar(26);
+  }
+
+  function charToNumber(char) {
+    let number = char.charCodeAt(0) - 64;
+    if (number <  1 || number > 26) {
+      console.log('AAAAHHHHHHH !');
+    }
+    return number;
+  }
+
+  function numberToChar(number) {
+    if (number <  1 || number > 26) {
+      console.log('AAAAHHHHHHH !');
+    }
+    return String.fromCharCode(number + 64);
+  }
+
+  function init() {
+    let table = document.createElement('table');
+    let tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+    
+    for (i = 1; i < 11; i++) {
+      let tr = document.createElement('tr');
+      tbody.appendChild(tr);
+      for (j = 1; j < 11; j++) {
+        let td = document.createElement('td');
+        td.style.border = '1px solid black';
+        td.style.width = '40px';
+        let coords = `${numberToChar(i)}${j}`;
+        let text = document.createTextNode(coords);
+        td.appendChild(text);
+        tr.appendChild(td);
+        td.addEventListener('click', () => console.log(coords));
+      }
+    }
+    document.body.appendChild(table);
+  }
+
+  </script>
+  <title>Document</title>
+</head>
+
+<body onload="init()">
+  <p id="demo">hello reddit</p>
+  <button type="button" onclick="javascript:test()">Test!</button>
+</body>
+
+</html>
