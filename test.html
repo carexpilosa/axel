@@ -40,17 +40,32 @@
       for (j = 1; j < 11; j++) {
         let td = document.createElement('td');
         td.style.border = '1px solid black';
-        td.style.width = '40px';
+        td.style.width = '300px';
+        td.style.height = '24px';
         let coords = `${numberToChar(i)}${j}`;
+        td.id = coords;
         let text = document.createTextNode(coords);
         td.appendChild(text);
         tr.appendChild(td);
-        td.addEventListener('click', () => console.log(coords));
+        td.addEventListener('click', clickHandler);
       }
     }
     document.body.appendChild(table);
   }
 
+  function clickHandler(e) {
+    console.log(e.target);
+    let elm = e.target;
+    console.log(elm.firstChild);
+    let textContent = elm.firstChild.textContent;
+    console.log(textContent);
+    elm.removeChild(elm.firstChild);
+    let input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.value = textContent;
+    elm.appendChild(input);
+    elm.removeEventListener('click', clickHandler);
+  }
   </script>
   <title>Document</title>
 </head>
