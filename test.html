@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script>
-  var tableOffsetTop, tableOffsetLeft;
   
   function test() {
     console.log('test => ',
@@ -34,6 +33,7 @@
 
   function init() {
     let table = document.createElement('table');
+    table.id = 'axlTable';
     let tbody = document.createElement('tbody');
     table.appendChild(tbody);
     
@@ -54,14 +54,13 @@
       }
     }
     document.body.appendChild(table);
-    tableOffsetLeft = table.offsetLeft;
-    tableOffsetTop = table.offsetTop;
   }
 
   function TextClickHandler(e) {
     let td = e.target;
     let textContent = td.firstChild.textContent;
     let input = document.createElement('input');
+    input.id = `input_${td.id}`;
     input.setAttribute('type', 'text');
     input.style.width = '30px';
     input.addEventListener('blur', InputClickHandler);
@@ -69,16 +68,14 @@
     input.value = textContent;
 
     let div = document.createElement('div');
-    div.style.left = `${td.offsetLeft + tableOffsetLeft}px`;
-    div.style.top = `${td.offsetTop + tableOffsetTop}px`;
+    div.style.left = `${td.offsetLeft + document.getElementById('axlTable').offsetLeft + 2}px`;
+    div.style.top = `${td.offsetTop + document.getElementById('axlTable').offsetTop + 4}px`;
     div.style.position = 'absolute';
-    div.style.color = 'red';
-    let divTxt = document.createTextNode('X');
-    div.appendChild(divTxt);
+    div.appendChild(input);
     document.body.appendChild(div);
 
 
-    td.replaceChild(input ,td.firstChild);
+    td.removeChild(td.firstChild);
     td.removeEventListener('click', TextClickHandler);
     input.focus();
   }
