@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script>
+  var tableOffsetTop, tableOffsetLeft;
+  
   function test() {
     console.log('test => ',
       charToNumber('A') === 1,
@@ -52,6 +54,8 @@
       }
     }
     document.body.appendChild(table);
+    tableOffsetLeft = table.offsetLeft;
+    tableOffsetTop = table.offsetTop;
   }
 
   function TextClickHandler(e) {
@@ -63,6 +67,17 @@
     input.addEventListener('blur', InputClickHandler);
     input.addEventListener('keypress', InputKeypressHandler);
     input.value = textContent;
+
+    let div = document.createElement('div');
+    div.style.left = `${td.offsetLeft + tableOffsetLeft}px`;
+    div.style.top = `${td.offsetTop + tableOffsetTop}px`;
+    div.style.position = 'absolute';
+    div.style.color = 'red';
+    let divTxt = document.createTextNode('X');
+    div.appendChild(divTxt);
+    document.body.appendChild(div);
+
+
     td.replaceChild(input ,td.firstChild);
     td.removeEventListener('click', TextClickHandler);
     input.focus();
