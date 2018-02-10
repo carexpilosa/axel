@@ -63,11 +63,12 @@
     input.id = `input_${td.id}`;
     input.setAttribute('type', 'text');
     input.style.width = '30px';
-    input.addEventListener('blur', InputClickHandler);
+    input.addEventListener('blur', InputBlurHandler);
     input.addEventListener('keypress', InputKeypressHandler);
     input.value = textContent;
 
     let div = document.createElement('div');
+    div.id = `div_${td.id}`;
     div.style.left = `${td.offsetLeft + document.getElementById('axlTable').offsetLeft + 2}px`;
     div.style.top = `${td.offsetTop + document.getElementById('axlTable').offsetTop + 4}px`;
     div.style.position = 'absolute';
@@ -80,19 +81,21 @@
     input.focus();
   }
 
-  function InputClickHandler(e) {
+  function InputBlurHandler(e) {
     let input = e.target;
     let textContent = e.target.value;
-    let td = input.parentNode;
+    console.log(input.id);
+    let tdId = input.id.replace(/^input_/, '');
+    let td = document.getElementById(tdId);
     let text = document.createTextNode(textContent);
-    td.replaceChild(text, input);
+    input.parentNode.replaceChild(text, input);
     td.addEventListener('click', TextClickHandler);
   }
 
   function InputKeypressHandler(e) {
     if(e.keyCode === 13) {
-      e.target.removeEventListener('blur', InputClickHandler);
-      InputClickHandler(e);
+      e.target.removeEventListener('blur', InputBlurHandler);
+      InputBlurHandler(e);
     }
   }
   </script>
