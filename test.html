@@ -60,6 +60,9 @@
   function TextClickHandler(e) {
     let td = e.target;
     let textContent = td.firstChild.textContent;
+    let inputDiv = renderInputDiv(td.id, textContent);
+    
+    /*
     let input = document.createElement('input');
     input.id = `input_${td.id}`;
     input.setAttribute('type', 'text');
@@ -74,22 +77,29 @@
     div.style.top = `${td.offsetTop + document.getElementById('axlTable').offsetTop + 4}px`;
     div.style.position = 'absolute';
     div.appendChild(input);
-    document.body.appendChild(div);
+    */
+
+    document.body.appendChild(inputDiv);
 
 
     td.removeChild(td.firstChild);
     td.removeEventListener('click', TextClickHandler);
-    input.focus();
+    inputDiv.firstChild.focus();
   }
 
   function InputBlurHandler(e) {
     let input = e.target;
     let value = input.value;
     let tdId = input.id.replace(/^input_/, '');
+    console.log('input', input);
     let td = document.getElementById(tdId);
     let text = document.createTextNode(value);
+
     let div = document.getElementById(`div_${tdId}`);
-    div.parentNode.removeChild(document.getElementById(`div_${tdId}`));
+    if (div) {
+      div.parentNode.removeChild(document.getElementById(`div_${tdId}`));
+    }
+    
     td.appendChild(text);
     td.addEventListener('click', TextClickHandler);
   }
@@ -101,7 +111,25 @@
     }
   }
 
-  function renderInputDiv(id, value) {}
+  function renderInputDiv(tdId, value) {
+    let input = document.createElement('input');
+    input.id = `input_${tdId}`;
+    input.setAttribute('type', 'text');
+    input.style.width = '150px';
+    input.addEventListener('blur', InputBlurHandler);
+    input.addEventListener('keypress', InputKeypressHandler);
+    input.value = value;
+
+    let td = document.getElementById(tdId);
+    let table = document.getElementById('axlTable');
+    let div = document.createElement('div');
+    div.id = `div_${tdId}`;
+    div.style.left = `${td.offsetLeft + table.offsetLeft + 2}px`;
+    div.style.top = `${td.offsetTop + table.offsetTop + 4}px`;
+    div.style.position = 'absolute';
+    div.appendChild(input);
+    return div;
+  }
 
   function renderText(content) {}
 
