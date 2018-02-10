@@ -7,24 +7,25 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script>
   function test() {
-    charToNumber('A');
-    charToNumber('Z');
-
-    numberToChar(1);
-    numberToChar(26);
+    console.log('test => ',
+      charToNumber('A') === 1,
+      charToNumber('Z') === 26,
+      numberToChar(1) === 'A',
+      numberToChar(26) === 'Z'
+    );
   }
 
   function charToNumber(char) {
     let number = char.charCodeAt(0) - 64;
     if (number <  1 || number > 26) {
-      console.log('AAAAHHHHHHH !');
+      console.log(`charToNumber: invalid char => ${char}`);
     }
     return number;
   }
 
   function numberToChar(number) {
     if (number <  1 || number > 26) {
-      console.log('AAAAHHHHHHH !');
+      console.log(`numberToChar: invalid number => ${number}`);
     }
     return String.fromCharCode(number + 64);
   }
@@ -47,24 +48,40 @@
         let text = document.createTextNode(coords);
         td.appendChild(text);
         tr.appendChild(td);
-        td.addEventListener('click', clickHandler);
+        td.addEventListener('click', TextClickHandler);
       }
     }
     document.body.appendChild(table);
   }
 
-  function clickHandler(e) {
-    console.log(e.target);
-    let elm = e.target;
-    console.log(elm.firstChild);
-    let textContent = elm.firstChild.textContent;
-    console.log(textContent);
-    elm.removeChild(elm.firstChild);
+  function TextClickHandler(e) {
+    let td = e.target;
+    let textContent = td.firstChild.textContent;
     let input = document.createElement('input');
     input.setAttribute('type', 'text');
+    input.style.width = '30px';
+    input.addEventListener('blur', InputClickHandler);
+    input.addEventListener('keypress', InputKeypressHandler);
     input.value = textContent;
-    elm.appendChild(input);
-    elm.removeEventListener('click', clickHandler);
+    td.replaceChild(input ,td.firstChild);
+    td.removeEventListener('click', TextClickHandler);
+    input.focus();
+  }
+
+  function InputClickHandler(e) {
+    let input = e.target;
+    let textContent = e.target.value;
+    let td = input.parentNode;
+    let text = document.createTextNode(textContent);
+    td.replaceChild(text, input);
+    td.addEventListener('click', TextClickHandler);
+  }
+
+  function InputKeypressHandler(e) {
+    if(e.keyCode === 13) {
+      e.target.removeEventListener('blur', InputClickHandler);
+      InputClickHandler(e);
+    }
   }
   </script>
   <title>Document</title>
